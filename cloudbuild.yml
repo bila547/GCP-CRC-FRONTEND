@@ -1,0 +1,16 @@
+steps:
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: 'sh'
+  args:
+  - '-c'  
+  - |
+    echo "Uploading updated files to Cloud Storage without deleting existing files..."
+    gsutil -m rsync -r . gs://bilaldev.site
+    echo "Invalidating Cloud CDN cache..."
+    gcloud compute url-maps invalidate-cdn-cache  bilal-lb --path "/*"
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+timeout: '900s'
+:set ff=unix
